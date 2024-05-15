@@ -1,0 +1,7 @@
+{
+  "name": "accessVision",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
