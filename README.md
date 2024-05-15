@@ -1,0 +1,2 @@
+# ionic
+ionic_angular
