@@ -1,7 +1,7 @@
 <ion-content class="ion-padding" fullscreen>
   <!-- Background image -->
   <div class="background-image"></div>
-  
+
   <div class="center">
     <!-- Bienvenue text -->
     <div class="welcome-text">
@@ -9,10 +9,10 @@
     </div>
 
     <!-- Bouton Commencer -->
-  <ion-button expand="block" class="start-button" routerLink="/tabs/tab2">
+  <ion-button (click)="connectToDevice()" expand="block" class="start-button" routerLink="/tabs/tab2">
     <div>Commencer</div>
   </ion-button>
 
   </div>
-  
+
 </ion-content>
