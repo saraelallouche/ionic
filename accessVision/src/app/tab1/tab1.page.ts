@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { BluetoothStatusService } from '../service/bluetooth-status.service';
+import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
+
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -10,23 +11,26 @@ export class Tab1Page {
 
 
  constructor(
-    private bluetoothSerial: BluetoothSerial,
-    private bluetoothStatusService: BluetoothStatusService
+    private bluetoothSerial: BluetoothSerial
   ) {}
 
+
   connectToDevice() {
-    this.bluetoothSerial.connect('D8:3A:DD:94:E4:06').subscribe(
-      () => {
-        alert('Connected to raspberry pi!');
-        console.log('Connected to raspberry pi!');
-        this.bluetoothStatusService.updateStatus('connected');
-      },
-      (error) => {
-        alert('Error connecting to raspberry pi!');
-        console.error('Connection error', error);
-        this.bluetoothStatusService.updateStatus('disconnected');
+   this.bluetoothSerial.list().then((devices) => {
+      console.log('Available devices:', devices);
+      const device = devices.find((d: any) => d.id === 'D8:3A:DD:94:E4:06');
+      if (device) {
+        this.bluetoothSerial.connect(device.id).subscribe(
+          success => console.log('Connected successfully to', device.name),
+          error => console.error('Connection failed', error)
+        );
+      } else {
+        console.error('Could not find the peripheral with the specified address.');
       }
-    );
+    }, (error) => {
+      console.error('Error listing Bluetooth devices', error);
+    });
+
   }
 
   listenForNotifications() {
