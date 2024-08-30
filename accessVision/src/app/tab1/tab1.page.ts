@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { BluetoothStatusService } from '../service/bluetooth-status.service';
-import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
+import {BluetoothSerial} from "@ionic-native/bluetooth-serial/ngx";
+import {
+  BluetoothClassicSerialPort,
+} from '@awesome-cordova-plugins/bluetooth-classic-serial-port';
+import {AndroidPermissions} from "@ionic-native/android-permissions/ngx";
 
 @Component({
   selector: 'app-tab1',
@@ -11,40 +15,56 @@ export class Tab1Page {
 
 
  constructor(
-    private bluetoothSerial: BluetoothSerial
+    private bluetoothSerial: BluetoothSerial,
+    private androidPermissions: AndroidPermissions,
   ) {}
 
 
-  connectToDevice() {
-   this.bluetoothSerial.list().then((devices) => {
-      console.log('Available devices:', devices);
-      const device = devices.find((d: any) => d.id === 'D8:3A:DD:94:E4:06');
-      if (device) {
-        this.bluetoothSerial.connect(device.id).subscribe(
-          success => console.log('Connected successfully to', device.name),
-          error => console.error('Connection failed', error)
-        );
-      } else {
-        console.error('Could not find the peripheral with the specified address.');
-      }
-    }, (error) => {
-      console.error('Error listing Bluetooth devices', error);
-    });
-
+  scanDevice() {
+   BluetoothClassicSerialPort.list().then((devices) => { console.log(devices); });
   }
 
-  listenForNotifications() {
-    this.bluetoothSerial.subscribe('\n').subscribe(
+  ionViewDidEnter() {
+    this.checkBluetoothPermissions().then(() => {
+    }).catch((error) => {
+      console.error('Permissions refusées', error);
+    });
+  }
+
+  async checkBluetoothPermissions(): Promise<void> {
+    const hasPermission = await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.BLUETOOTH_SCAN);
+    if (!hasPermission.hasPermission) {
+      await this.androidPermissions.requestPermissions([
+        this.androidPermissions.PERMISSION.BLUETOOTH_SCAN,
+        this.androidPermissions.PERMISSION.BLUETOOTH_CONNECT,
+        this.androidPermissions.PERMISSION.BLUETOOTH_ADMIN,
+        this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION
+      ]);
+    }
+  }
+
+  connectToDevice() {
+    this.bluetoothSerial.connect('D8:3A:DD:94:E4:06').subscribe(
       (data) => {
-        console.log('Received data:', data);
-        // Vous pouvez ici traiter et afficher la notification
-        alert('Notification: ' + data);
+        // Connexion réussie
+        console.log('Connected:', data);
+        this.sendNotification('start'); // Envoi de la notification après connexion
       },
       (error) => {
-        console.error('Error receiving data', error);
+        // Erreur lors de la connexion
+        console.error('Error connecting:', error);
       }
     );
   }
 
-
+  sendNotification(message: string) {
+    this.bluetoothSerial.write(message).then(
+      () => {
+        console.log('Notification envoyée :', message);
+      },
+      (error) => {
+        console.error('Erreur lors de l\'envoi de la notification :', error);
+      }
+    );
+  }
 }
