@@ -1,0 +1,22 @@
+
+
+<ion-content class="background">
+  <div class="page">
+    <label id="adresse" class="texte">
+      Saisir l'adresse MAC de votre appareil
+    </label>
+    <ion-item class="input">
+      <ion-input aria-label="adresse" [(ngModel)]="adresse" placeholder="XX:XX:XX:XX:XX:XX"></ion-input> <!-- Utilisation de ngModel pour la liaison bi-directionnelle -->
+    </ion-item>
+
+    <ion-button class="button" (click)="saveAdresse()">Sauvegarder </ion-button>
+
+    <ion-button (click)="connectToDevice()" expand="block" class="button" >
+      <div>Connecter le boitier</div>
+    </ion-button>
+
+    <ion-button expand="block" class="button" routerLink="/tabs/tab1">
+      <div>Accueil</div>
+    </ion-button>
+  </div>
+</ion-content>

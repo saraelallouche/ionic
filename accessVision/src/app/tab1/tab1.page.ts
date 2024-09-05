@@ -43,28 +43,5 @@ export class Tab1Page {
     }
   }
 
-  connectToDevice() {
-    this.bluetoothSerial.connect('D8:3A:DD:94:E4:06').subscribe(
-      (data) => {
-        // Connexion réussie
-        console.log('Connected:', data);
-        this.sendNotification('start'); // Envoi de la notification après connexion
-      },
-      (error) => {
-        // Erreur lors de la connexion
-        console.error('Error connecting:', error);
-      }
-    );
-  }
 
-  sendNotification(message: string) {
-    this.bluetoothSerial.write(message).then(
-      () => {
-        console.log('Notification envoyée :', message);
-      },
-      (error) => {
-        console.error('Erreur lors de l\'envoi de la notification :', error);
-      }
-    );
-  }
 }

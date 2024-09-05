@@ -33,7 +33,6 @@ export class Tab2Page implements OnInit {
           console.error('Error receiving message:', error);
         }
       );
-
   }
 
   getCurrentTime(): string {
