@@ -10,10 +10,11 @@ import {
 } from '@awesome-cordova-plugins/bluetooth-classic-serial-port';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import {IonicStorageModule} from "@ionic/storage-angular";
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [ BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [ IonicStorageModule.forRoot(), BrowserModule, IonicModule.forRoot(), AppRoutingModule],
   providers: [ Platform, AndroidPermissions, BluetoothSerial, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
+import {ConnecterPageModule} from "../connecter/connecter.module";
 
 const routes: Routes = [
   {
@@ -14,6 +15,10 @@ const routes: Routes = [
       {
         path: 'tab2',
         loadChildren: () => import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+      },
+      {
+        path: 'connecter',
+        loadChildren: () => import('../connecter/connecter.module').then(m => m.ConnecterPageModule)
       },
       {
         path: '',

@@ -18,7 +18,7 @@ export class Tab1Page {
  constructor(
     private bluetoothSerial: BluetoothSerial,
     private androidPermissions: AndroidPermissions,
-    private navCtrl: NavController  
+    private navCtrl: NavController
   ) {}
 
 

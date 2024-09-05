@@ -9,10 +9,21 @@
       <h1>Bienvenue</h1>
     </div>
 
-    <!-- Bouton Commencer -->
-  <ion-button (click)="connectToDevice()" expand="block" class="start-button">
-    <div>Se connecter</div>
-  </ion-button>
+     <ion-button  expand="block" class="start-button" routerLink="/tabs/connecter">
+      <div>Connecter le boitier</div>
+    </ion-button>
+
+    <ion-button (click)="connectToDevice()" expand="block" class="start-button">
+      <div>Commencer</div>
+    </ion-button>
+
+    <ion-button  expand="block" class="start-button" routerLink="contact">
+      <div>Contacter le support </div>
+    </ion-button>
+
+    <ion-button  expand="block" class="start-button" routerLink="youtube">
+      <div>Tutoriel</div>
+    </ion-button>
 
   </div>
 
