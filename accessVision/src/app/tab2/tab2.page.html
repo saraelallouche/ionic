@@ -2,19 +2,22 @@
 
   <div class="center">
 
-    <div class="welcome-text">
-      <h1>{{ message }}</h1>
-    </div>
+   
 
     <!-- Bienvenue text -->
     <div class="welcome-text">
-      <h1>En cours de détection</h1>
+      <h1>Vous êtes connecté </h1>
     </div>
 
-    <!-- Bouton Commencer -->
-  <ion-button expand="block" class="start-button" routerLink="/tabs/tab1">
-    <div>STOP</div>
+     
+  <ion-button expand="block" class="start-button" routerLink="/tabs/tab3">
+    <div>Commencer l'analyse</div>
   </ion-button>
+
+  <ion-button (click)="disconnect()" expand="block" class="start-button" routerLink="/tabs/tab1">
+    <div>Se deconnecter</div>
+  </ion-button>
+
 
   </div>
 

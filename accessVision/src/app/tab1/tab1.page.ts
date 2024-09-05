@@ -5,6 +5,7 @@ import {
   BluetoothClassicSerialPort,
 } from '@awesome-cordova-plugins/bluetooth-classic-serial-port';
 import {AndroidPermissions} from "@ionic-native/android-permissions/ngx";
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab1',
@@ -17,6 +18,7 @@ export class Tab1Page {
  constructor(
     private bluetoothSerial: BluetoothSerial,
     private androidPermissions: AndroidPermissions,
+    private navCtrl: NavController  
   ) {}
 
 
@@ -49,6 +51,8 @@ export class Tab1Page {
         // Connexion réussie
         console.log('Connected:', data);
         this.sendNotification('start'); // Envoi de la notification après connexion
+        this.navCtrl.navigateForward('/tabs/tab2'); // Navigate to tab2 after successful connection
+
       },
       (error) => {
         // Erreur lors de la connexion
