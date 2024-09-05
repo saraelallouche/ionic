@@ -29,20 +29,11 @@ export class ConnecterPage implements OnInit {
 
   // Sauvegarder l'adresse MAC
   async saveAdresse() {
+    if (!this.adresse) {
+          await this.storage.set('adresse_mac', "");
+    }
     await this.storage.set('adresse_mac', this.adresse);
   }
 
-  connectToDevice() {
-    this.bluetoothSerial.connect('D8:3A:DD:94:E4:06').subscribe(
-      (data) => {
-        // Connexion réussie
-        console.log('Connected:', data);
-      },
-      (error) => {
-        // Erreur lors de la connexion
-        console.error('Error connecting:', error);
-      }
-    );
-  }
 }
 

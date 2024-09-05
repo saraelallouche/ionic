@@ -5,7 +5,8 @@ import {
   BluetoothClassicSerialPort,
 } from '@awesome-cordova-plugins/bluetooth-classic-serial-port';
 import {AndroidPermissions} from "@ionic-native/android-permissions/ngx";
-import { NavController } from '@ionic/angular';
+import {AlertController, NavController} from '@ionic/angular';
+import {Storage} from "@ionic/storage-angular";
 
 @Component({
   selector: 'app-tab1',
@@ -14,19 +15,33 @@ import { NavController } from '@ionic/angular';
 })
 export class Tab1Page {
 
+  adresse: string = 'test';
 
  constructor(
     private bluetoothSerial: BluetoothSerial,
     private androidPermissions: AndroidPermissions,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private storage: Storage,
+  private alertController: AlertController, // Injecter AlertController
+
   ) {}
 
+  async ngOnInit() {
 
-  scanDevice() {
-   BluetoothClassicSerialPort.list().then((devices) => { console.log(devices); });
   }
 
-  ionViewDidEnter() {
+  async ionViewDidEnter() {
+   // Initialisation du stockage
+    await this.storage.create();
+
+    // Charger l'adresse MAC stockée (si disponible)
+    const storedAdresse = await this.storage.get('adresse_mac');
+    if (storedAdresse) {
+      this.adresse = storedAdresse;
+    }
+    else {
+      this.adresse = '';
+    }
     this.checkBluetoothPermissions().then(() => {
     }).catch((error) => {
       console.error('Permissions refusées', error);
@@ -45,8 +60,9 @@ export class Tab1Page {
     }
   }
 
-  connectToDevice() {
-    this.bluetoothSerial.connect('D8:3A:DD:94:E4:06').subscribe(
+  async connectToDevice() {
+    await this.verifyAdresse(); // Vérifier si l'adresse est vide
+    this.bluetoothSerial.connect(this.adresse).subscribe(
       (data) => {
         // Connexion réussie
         console.log('Connected:', data);
@@ -70,5 +86,20 @@ export class Tab1Page {
         console.error('Erreur lors de l\'envoi de la notification :', error);
       }
     );
+  }
+
+  async verifyAdresse() {
+   // Vérifier si l'adresse est vide
+    if (!this.adresse || this.adresse.trim() === '') {
+      // Si l'adresse n'est pas présente, afficher une alerte
+      const alert = await this.alertController.create({
+        header: 'Erreur',
+        message: 'Veuillez saisir une adresse MAC avant de commencer.',
+        buttons: ['OK']
+      });
+      await alert.present();
+      return; // Ne pas continuer la connexion si l'adresse est vide
+    }
+
   }
 }
