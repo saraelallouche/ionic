@@ -9,52 +9,42 @@ import { TextToSpeechService } from '../service/text-to-speech.service';
   styleUrls: ['./tab3.component.scss'],
 })
 export class Tab3Component  implements OnInit {
-
   constructor(
     private bluetoothStatusService: BluetoothStatusService,
     private bluetoothSerial: BluetoothSerial,
     private ttsService: TextToSpeechService
   ) {}
 
-  ngOnInit() {}
-
-
-  speak() {
-    this.ttsService.speak('Bonjour tout le monde!')
-      .then(() => console.log('Texte lu avec succès'))
-      .catch((error) => console.error('Erreur lors de la lecture du texte', error));
+  ngOnInit() {
+    this.listenForMessages() 
   }
 
 
-  sendNotification(message: string) {
-    this.bluetoothSerial.write(message).then(
-      () => {
-        console.log('Notification envoyée :', message);
-      },
-      (error) => {
-        console.error('Erreur lors de l\'envoi de la notification :', error);
-      }
-    );
+  speak(message: string) {
+    this.ttsService.speak(message)
+      .then(() => console.log('Alerte lu avec succès'))
+      .catch((error) => console.error('Erreur lors de la lecture du texte', error));
   }
 
   
   listenForMessages() {
-    // Vérifier d'abord si la connexion est bien établie
     this.bluetoothSerial.isConnected().then(() => {
-      this.sendNotification("start");
-      console.log('Bluetooth connecté, écoute des messages...');
       this.bluetoothSerial.subscribe('\n').subscribe(
         (message: string) => {
-          console.log('Message reçu:', message);
+          console.log("Message reçu: "+message);
+          this.speak(this.cleanTensorString(message))
         },
         (error) => {
-          console.error('Erreur lors de la réception du message:', error);
+          console.error('Erreur lors de la réception de l alerte:', error);
         }
       );
     }).catch((error) => {
       console.error('Bluetooth non connecté:', error);
-      // Vous pouvez ajouter une logique pour essayer de se reconnecter ici
     });
   }
 
+
+   cleanTensorString(message: string): string {
+    return message.replace(/tensor\(([^)]+)\)/g, '$1');
+  }
 }

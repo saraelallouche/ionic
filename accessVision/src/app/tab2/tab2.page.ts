@@ -14,7 +14,6 @@ export class Tab2Page implements OnInit {
   constructor(
     private bluetoothStatusService: BluetoothStatusService,
     private bluetoothSerial: BluetoothSerial,
-    private ttsService: TextToSpeechService
   ) {}
 
   ngOnInit() {
