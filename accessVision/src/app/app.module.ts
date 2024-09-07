@@ -11,11 +11,14 @@ import {
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {IonicStorageModule} from "@ionic/storage-angular";
+import {CallNumber} from "@ionic-native/call-number/ngx";
+import {EmailComposer} from "@ionic-native/email-composer/ngx";
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [ IonicStorageModule.forRoot(), BrowserModule, IonicModule.forRoot(), AppRoutingModule],
-  providers: [ Platform, AndroidPermissions, BluetoothSerial, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [InAppBrowser, CallNumber,EmailComposer, Platform, AndroidPermissions, BluetoothSerial, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

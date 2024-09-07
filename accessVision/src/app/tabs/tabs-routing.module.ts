@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
 import {ConnecterPageModule} from "../connecter/connecter.module";
+import {ContacterPagesPageModule} from "../contacter-pages/contacter-pages.module";
 
 const routes: Routes = [
   {
@@ -23,6 +24,10 @@ const routes: Routes = [
       {
         path: 'connecter',
         loadChildren: () => import('../connecter/connecter.module').then(m => m.ConnecterPageModule)
+      },
+      {
+        path: 'contacter',
+        loadChildren: () => import('../contacter-pages/contacter-pages.module').then(m => m.ContacterPagesPageModule)
       },
       {
         path: '',

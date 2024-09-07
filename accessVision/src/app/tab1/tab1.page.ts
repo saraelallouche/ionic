@@ -4,6 +4,7 @@ import {BluetoothSerial} from "@ionic-native/bluetooth-serial/ngx";
 import {AndroidPermissions} from "@ionic-native/android-permissions/ngx";
 import {AlertController, NavController} from '@ionic/angular';
 import {Storage} from "@ionic/storage-angular";
+import {InAppBrowser} from "@ionic-native/in-app-browser/ngx";
 
 @Component({
   selector: 'app-tab1',
@@ -20,6 +21,7 @@ export class Tab1Page {
     private navCtrl: NavController,
     private storage: Storage,
     private alertController: AlertController,
+    private iab: InAppBrowser
 
   ) {}
 
@@ -55,10 +57,10 @@ export class Tab1Page {
   }
 
   async connectToDevice() {
-    await this.verifyAdresse(); 
+    await this.verifyAdresse();
     this.bluetoothSerial.connect(this.adresse).subscribe(
       (data) => {
-        this.sendNotification('start'); 
+        this.sendNotification('start');
         this.navCtrl.navigateForward('/tabs/tab2');
 
       },
@@ -87,8 +89,14 @@ export class Tab1Page {
         buttons: ['OK']
       });
       await alert.present();
-      return; 
+      return;
     }
 
+  }
+
+  // Fonction pour ouvrir le lien YouTube
+  openTutorial() {
+    const url = 'https://www.youtube.com/channel/UCJXSJ07RDcSQSBFf9Sn_hOw'; // Lien vers la vidéo YouTube
+    this.iab.create(url, '_system'); // Ouvre le lien dans l'application ou le navigateur
   }
 }
