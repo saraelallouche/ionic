@@ -7,6 +7,7 @@ import {
 import {AndroidPermissions} from "@ionic-native/android-permissions/ngx";
 import {AlertController, NavController} from '@ionic/angular';
 import {Storage} from "@ionic/storage-angular";
+import {InAppBrowser} from "@ionic-native/in-app-browser/ngx";
 
 @Component({
   selector: 'app-tab1',
@@ -23,6 +24,7 @@ export class Tab1Page {
     private navCtrl: NavController,
     private storage: Storage,
   private alertController: AlertController, // Injecter AlertController
+    private iab: InAppBrowser
 
   ) {}
 
@@ -101,5 +103,11 @@ export class Tab1Page {
       return; // Ne pas continuer la connexion si l'adresse est vide
     }
 
+  }
+
+  // Fonction pour ouvrir le lien YouTube
+  openTutorial() {
+    const url = 'https://www.youtube.com/channel/UCJXSJ07RDcSQSBFf9Sn_hOw'; // Lien vers la vidéo YouTube
+    this.iab.create(url, '_system'); // Ouvre le lien dans l'application ou le navigateur
   }
 }

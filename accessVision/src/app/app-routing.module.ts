@@ -10,6 +10,10 @@ const routes: Routes = [
     path: 'connecter',
     loadChildren: () => import('./connecter/connecter.module').then( m => m.ConnecterPageModule)
   },
+  {
+    path: 'contacter-pages',
+    loadChildren: () => import('./contacter-pages/contacter-pages.module').then( m => m.ContacterPagesPageModule)
+  },
 
 ];
 @NgModule({
