@@ -5,6 +5,7 @@ import {AndroidPermissions} from "@ionic-native/android-permissions/ngx";
 import {AlertController, NavController} from '@ionic/angular';
 import {Storage} from "@ionic/storage-angular";
 import {InAppBrowser} from "@ionic-native/in-app-browser/ngx";
+import {TextToSpeechService} from "../service/text-to-speech.service";
 
 @Component({
   selector: 'app-tab1',
@@ -21,16 +22,24 @@ export class Tab1Page {
     private navCtrl: NavController,
     private storage: Storage,
     private alertController: AlertController,
-    private iab: InAppBrowser
+    private iab: InAppBrowser,
+    private ttsService: TextToSpeechService
+
 
   ) {}
 
   async ngOnInit() {
-
+   await this.storage.create();
+    const storedAdresse = await this.storage.get('adresse_mac');
+    if (storedAdresse) {
+      this.speak("Bienvenue sur l'application Access Vision. Veuillez cliquer sur 'Se Connecter' pour commencer.")
+    }
+    else {
+      this.speak("Bienvenue sur l'application Access Vision. Veuillez saisir l'adresse MAC de votre appareil pour commencer.")
+    }
   }
 
   async ionViewDidEnter() {
-    await this.storage.create();
     const storedAdresse = await this.storage.get('adresse_mac');
     if (storedAdresse) {
       this.adresse = storedAdresse;
@@ -57,11 +66,14 @@ export class Tab1Page {
   }
 
   async connectToDevice() {
-    await this.verifyAdresse();
+    let haveAdresse = await this.verifyAdresse();
+    if (!haveAdresse) {
+      return;
+    }
     this.bluetoothSerial.connect(this.adresse).subscribe(
       (data) => {
         this.sendNotification('start');
-        this.navCtrl.navigateForward('/tabs/tab2');
+        this.navCtrl.navigateForward('/tabs/git ');
 
       },
       (error) => {
@@ -81,17 +93,25 @@ export class Tab1Page {
     );
   }
 
-  async verifyAdresse() {
+  async verifyAdresse(): Promise<boolean> {
+    let message = "Veuillez saisir une adresse MAC avant de commencer."
     if (!this.adresse || this.adresse.trim() === '') {
       const alert = await this.alertController.create({
         header: 'Erreur',
-        message: 'Veuillez saisir une adresse MAC avant de commencer.',
+        message: message,
         buttons: ['OK']
       });
       await alert.present();
-      return;
+      this.speak(message)
+      return false;
     }
+    return true;
+  }
 
+  speak(message: string) {
+    this.ttsService.speak(message)
+      .then(() => console.log('Alerte lu avec succès'))
+      .catch((error) => console.error('Erreur lors de la lecture du texte', error));
   }
 
   // Fonction pour ouvrir le lien YouTube
