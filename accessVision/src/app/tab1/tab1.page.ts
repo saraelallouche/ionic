@@ -73,7 +73,7 @@ export class Tab1Page {
     this.bluetoothSerial.connect(this.adresse).subscribe(
       (data) => {
         this.sendNotification('start');
-        this.navCtrl.navigateForward('/tabs/git ');
+        this.navCtrl.navigateForward('/tabs/tab2 ');
 
       },
       (error) => {
